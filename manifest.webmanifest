@@ -1,0 +1,1 @@
+{"name": "Stillwater Rig Assistant", "short_name": "Rig Assistant", "start_url": "./", "display": "standalone", "background_color": "#e9f0ed", "theme_color": "#102e31", "icons": [{"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]}
