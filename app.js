@@ -118,6 +118,47 @@ function approximateX(diameter) {
   return "0X";
 }
 
+
+function findMatchingTippets(diameter, material) {
+  if (!productLibrary || !Array.isArray(productLibrary.tippets)) {
+    return [];
+  }
+
+  const preferredMaterial = material.toLowerCase();
+
+  return productLibrary.tippets
+    .filter(product => {
+      const actualDiameter = Number(product.diameter_mm);
+
+      return (
+        Number.isFinite(actualDiameter) &&
+        actualDiameter > 0 &&
+        Math.abs(actualDiameter - diameter) <= 0.015
+      );
+    })
+    .map(product => {
+      const productMaterial = String(product.material || "").toLowerCase();
+
+      const materialMatch =
+        preferredMaterial.includes("fluorocarbon")
+          ? productMaterial.includes("fluorocarbon")
+          : productMaterial.includes("nylon") ||
+            productMaterial.includes("copolymer");
+
+      return {
+        ...product,
+        materialMatch,
+        difference: Math.abs(Number(product.diameter_mm) - diameter)
+      };
+    })
+    .sort((a, b) =>
+      Number(b.materialMatch) - Number(a.materialMatch) ||
+      a.difference - b.difference
+    )
+    .slice(0, 5);
+}
+
+
 $("find").addEventListener("click", () => {
   const method = $("method").value;
   const fly = Number($("fly").value);
