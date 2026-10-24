@@ -188,6 +188,7 @@ $("find").addEventListener("click", () => {
   const method = $("method").value;
   const fly = Number($("fly").value);
   const water = $("water").value;
+  const light = $("light").value;
   const r = rigs[method];
 
   let diameter;
@@ -294,6 +295,8 @@ $("find").addEventListener("click", () => {
 
     <h3>Fishing tip</h3>
     <p>${r.tip}</p>
+    <h3>Light &amp; weather advice</h3>
+<p>${lightAdvice[light] || "Watch the trout and adjust your presentation to the conditions."}</p>
 
     <p class="note">
       Recommendations are starting points for stocked
