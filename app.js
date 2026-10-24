@@ -227,51 +227,6 @@ $("find").addEventListener("click", () => {
     ["Joining knot", "Double Uni or blood knot"]
   ];
 
-  
-  const matches = findMatchingTippets(diameter, r.material);
-
-  const escapeHTML = value => String(value ?? "").replace(
-    /[&<>"']/g,
-    character => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    })[character]
-  );
-
-  const matchingProductsHTML = matches.length
-    ? `
-      <h3>Matching tippets from your library</h3>
-      ${matches.map(product => `
-        <div class="line">
-          <span>
-            <strong>${escapeHTML(product.brand)}</strong>
-            ${escapeHTML(product.product)}
-          </span>
-          <span>
-            ${escapeHTML(product.x_rating || "—")}
-            · ${Number(product.diameter_mm).toFixed(3)} mm
-            · ${escapeHTML(product.breaking_strain_lb || "—")} lb
-          </span>
-        </div>
-      `).join("")}
-      <p class="note">
-        Matched by diameter. Check material, breaking strain
-        and suitability before fishing.
-      </p>
-    `
-    : `
-      <h3>Matching tippets</h3>
-      <p class="note">
-        No matching products are loaded yet.
-        Your rig recommendation still works independently.
-      </p>
-    `;
-
-  
-  const rowHTML = rows.map(([label, value]) => `
     <div class="line">
       <span>${label}</span>
       <span>${value}</span>
