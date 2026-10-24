@@ -1,10 +1,10 @@
 
-const CACHE = "stillwater-rig-v6";
+const CACHE = "stillwater-rig-v8";
 
 const FILES = [
   "./",
   "./index.html",
-  "./app.js?v=6",
+  "./app.js?v=8",
   "./manifest.webmanifest",
   "./icon.svg"
 ];
