@@ -241,7 +241,6 @@ $("find").addEventListener("click", () => {
     </div>
 
     ${rowHTML}
-    ${matchingProductsHTML}
     <h3>Rig assembly</h3>
     <div class="diagram">
       Fly line → ${r.leaderX} leader
