@@ -1,4 +1,9 @@
 
+/*
+  STILLWATER RIG ASSISTANT
+  Public field guide — Version 8
+*/
+
 const rigs = {
   "Indicator / Bung": {
     line: "Floating",
@@ -10,6 +15,7 @@ const rigs = {
     maxDiameter: 0.22,
     tip: "Adjust the indicator-to-fly distance to fish at the correct depth."
   },
+
   "Static Buzzers": {
     line: "Floating",
     leaderLength: "9 ft",
@@ -20,6 +26,7 @@ const rigs = {
     maxDiameter: 0.20,
     tip: "Fish slowly or static. Change depth before changing your fly."
   },
+
   "Dry Fly": {
     line: "Floating",
     leaderLength: "9 ft",
@@ -30,6 +37,7 @@ const rigs = {
     maxDiameter: 0.18,
     tip: "Aim for a natural, drag-free presentation."
   },
+
   "Washing Line": {
     line: "Floating / Midge-tip",
     leaderLength: "9 ft",
@@ -40,6 +48,7 @@ const rigs = {
     maxDiameter: 0.23,
     tip: "Retrieve slowly and keep your flies fishing in the upper layers."
   },
+
   "Pulling Lures": {
     line: "Intermediate / Sinking",
     leaderLength: "5–7.5 ft",
@@ -51,7 +60,6 @@ const rigs = {
     tip: "Use stronger tippet for heavy lures and aggressive retrieves."
   }
 };
-
 
 const lightAdvice = {
   "Early morning":
@@ -76,7 +84,6 @@ const lightAdvice = {
     "Check the margins and surface for feeding trout as the light fades."
 };
 
-
 const $ = id => document.getElementById(id);
 
 function approximateX(diameter) {
@@ -90,53 +97,15 @@ function approximateX(diameter) {
   return "0X";
 }
 
-
-function findMatchingTippets(diameter, material) {
-  if (!productLibrary || !Array.isArray(productLibrary.tippets)) {
-    return [];
-  }
-
-  const preferredMaterial = material.toLowerCase();
-
-  return productLibrary.tippets
-    .filter(product => {
-      const actualDiameter = Number(product.diameter_mm);
-
-      return (
-        Number.isFinite(actualDiameter) &&
-        actualDiameter > 0 &&
-        Math.abs(actualDiameter - diameter) <= 0.015
-      );
-    })
-    .map(product => {
-      const productMaterial = String(product.material || "").toLowerCase();
-
-      const materialMatch =
-        preferredMaterial.includes("fluorocarbon")
-          ? productMaterial.includes("fluorocarbon")
-          : productMaterial.includes("nylon") ||
-            productMaterial.includes("copolymer");
-
-      return {
-        ...product,
-        materialMatch,
-        difference: Math.abs(Number(product.diameter_mm) - diameter)
-      };
-    })
-    .sort((a, b) =>
-      Number(b.materialMatch) - Number(a.materialMatch) ||
-      a.difference - b.difference
-    )
-    .slice(0, 5);
-}
-
-
 $("find").addEventListener("click", () => {
   const method = $("method").value;
   const fly = Number($("fly").value);
   const water = $("water").value;
   const light = $("light").value;
+
   const r = rigs[method];
+
+  if (!r) return;
 
   let diameter;
 
@@ -174,6 +143,7 @@ $("find").addEventListener("click", () => {
     ["Joining knot", "Double Uni or blood knot"]
   ];
 
+  const rowHTML = rows.map(([label, value]) => `
     <div class="line">
       <span>${label}</span>
       <span>${value}</span>
@@ -188,6 +158,7 @@ $("find").addEventListener("click", () => {
     </div>
 
     ${rowHTML}
+
     <h3>Rig assembly</h3>
     <div class="diagram">
       Fly line → ${r.leaderX} leader
@@ -196,15 +167,17 @@ $("find").addEventListener("click", () => {
 
     <h3>Fishing tip</h3>
     <p>${r.tip}</p>
+
     <h3>Light &amp; weather advice</h3>
-<p>${lightAdvice[light] || "Watch the trout and adjust your presentation to the conditions."}</p>
+    <p>${lightAdvice[light] ||
+      "Watch the trout and adjust your presentation to the conditions."}</p>
 
     <p class="note">
       Recommendations are starting points for stocked
-      stillwater trout. X ratings are approximate:
-      check the actual diameter and breaking strain
-      of your chosen brand. Use stronger tippet where
-      fly weight, fish size or conditions require it.
+      stillwater trout. X ratings are approximate.
+      Prioritise actual diameter and breaking strain
+      when choosing your tackle. Adjust for fly weight,
+      fish size and fishing conditions.
     </p>
   `;
 
@@ -213,6 +186,10 @@ $("find").addEventListener("click", () => {
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
+    navigator.serviceWorker
+      .register("./sw.js")
+      .catch(error =>
+        console.warn("Offline service unavailable", error)
+      );
   });
 }
