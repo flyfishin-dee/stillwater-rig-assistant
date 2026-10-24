@@ -105,6 +105,31 @@ const rigs = {
   }
 };
 
+
+const lightAdvice = {
+  "Early morning":
+    "Check the margins and upper layers first. Low light can encourage trout to feed closer to the surface.",
+
+  "Bright sunshine":
+    "Look for trout in deeper water or shaded areas, but check for visible surface feeding before changing depth.",
+
+  "Partly cloudy":
+    "Watch for changes in feeding activity as the sun moves behind clouds. Be ready to adjust your fishing depth.",
+
+  "Overcast":
+    "Softer light can encourage trout to feed higher in the water. Watch for rises and moving fish.",
+
+  "Raining":
+    "Rain can make subtle takes harder to spot. Keep an eye on your indicator or line and adjust your presentation.",
+
+  "Snowing":
+    "Check for signs of feeding before assuming fish are deep. In cold conditions, slower presentations may help.",
+
+  "Evening / Dusk":
+    "Check the margins and surface for feeding trout as the light fades."
+};
+
+
 const $ = id => document.getElementById(id);
 
 function approximateX(diameter) {
