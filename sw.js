@@ -1,10 +1,10 @@
 
-const CACHE = "stillwater-rig-v3";
+const CACHE = "stillwater-rig-v6";
 
 const FILES = [
   "./",
   "./index.html",
-  "./app.js",
+  "./app.js?v=6",
   "./manifest.webmanifest",
   "./icon.svg"
 ];
@@ -23,7 +23,10 @@ self.addEventListener("activate", event => {
       .then(keys =>
         Promise.all(
           keys
-            .filter(key => key.startsWith("stillwater-rig-") && key !== CACHE)
+            .filter(key =>
+              key.startsWith("stillwater-rig-") &&
+              key !== CACHE
+            )
             .map(key => caches.delete(key))
         )
       )
@@ -37,20 +40,28 @@ self.addEventListener("fetch", event => {
   if (
     request.method !== "GET" ||
     new URL(request.url).origin !== self.location.origin
-  ) return;
+  ) {
+    return;
+  }
 
   event.respondWith(
     fetch(request)
       .then(response => {
         if (response.ok) {
           const copy = response.clone();
+
           event.waitUntil(
             caches.open(CACHE)
               .then(cache => cache.put(request, copy))
           );
         }
+
         return response;
       })
-      .catch(() => caches.match(request))
+      .catch(async () => {
+        const cached = await caches.match(request);
+
+        return cached || Response.error();
+      })
   );
 });
